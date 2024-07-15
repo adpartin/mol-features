@@ -1,0 +1,21 @@
+drug_name	improve_chem_id	sources
+Melphalan	Drug_1173	
+Bevacizumab		
+Carboplatin	Drug_720	CTRPv2
+Cisplatin	Drug_18	GDSCv1,GDSCv2
+Cisplatin	Drug_42	CTRPv2
+Cyclophosphamide	Drug_687	CTRPv2,GDSCv2
+Doxorubicin	Drug_1363	GDSCv2
+Mirvetuximab Soravtansine-gynx		
+Gemcitabine	Drug_60	
+Topotecan	Drug_195	CCLE,CTRPv2,GDSCv2
+Olaparib	Drug_1335	CTRPv2,GDSCv1,GDSCv2
+Niraparib	Drug_742	GDSCv2
+Paclitaxel	Drug_1127	CCLE,CTRPv2,gCSI,GDSCv1,GDSCv2
+Docetaxel	Drug_1105	CTRPv2,gCSI,GDSCv1,GDSCv2
+Rucaparib	Drug_458	
+Thiotepa	Drug_24	
+Etoposide	Drug_1485	CTRPv2,GDSCv1
+Tamoxifen	Drug_888	CTRPv2,GDSCv1,GDSCv2
+Letrozole	Drug_929	
+Pembrolizumab		

@@ -1,0 +1,21 @@
+drug_name	improve_chem_id
+Melphalan	Drug_1173
+Bevacizumab	
+Carboplatin	Drug_720
+Cisplatin	Drug_18
+Cisplatin	Drug_42
+Cyclophosphamide	Drug_687
+Doxorubicin	Drug_1363
+Mirvetuximab Soravtansine-gynx	
+Gemcitabine	Drug_60
+Topotecan	Drug_195
+Olaparib	Drug_1335
+Niraparib	Drug_742
+Paclitaxel	Drug_1127
+Docetaxel	Drug_1105
+Rucaparib	Drug_458
+Thiotepa	Drug_24
+Etoposide	Drug_1485
+Tamoxifen	Drug_888
+Letrozole	Drug_929
+Pembrolizumab	

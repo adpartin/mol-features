@@ -1,0 +1,20 @@
+OvarianCancerDrugsIMPROVE.txt -- drug name, improve id
+* Ovarian cancer drugs.
+
+OvarianCancerDrugsAndSourcesIMPROVE.txt -- drug name, improve id, source
+* Same as OvarianCancerDrugsIMPROVE.txt but with source name column
+
+Drugs_For_OV_Proposal_Analysis.txt -- drug name, improve id, source
+* "This is the list of drugs for which we will make response prediction. Based
+on Oleksandr’s list, I removed compounds for which we don’t have drug feature
+data."
+* Bevacizumab and Pembrolizumab were removed from OvarianCancerDrugsAndSourcesIMPROVE.txt
+since these are antibodies
+* "Bevacizumab and Pembrolizumab appear to be antibodies, thus wouldn't be in
+our chemical database."
+
+PDO_drugs_IMPROVE.tsv (138) -- drug name, improve id
+* "mapping to existing IMPROVE drugs checked using PubChem synonyms"
+
+PDO_pubchem_smiles.tsv (78) -- drug name, pubchem, smiles
+* "SMILES for the missing drugs"
