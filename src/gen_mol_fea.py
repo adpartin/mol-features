@@ -123,15 +123,14 @@ def run(args):
     fea_type = args.fea_type
 
     print('\nLoad SMILES.')
-    smiles_path = Path(args.smiles_path)
+    smiles_path = args.smiles_path
     if "drugbank" in smiles_path:
         smi = pd.read_csv(smiles_path, sep='\t', usecols=[0])  # drugbank all
     else:
         smi = pd.read_csv(smiles_path, sep='\t')
 
-
     new_id_name = "DrugID"  # rename column drug id_name
-    smi = smi.rename(columns={id_name: new_id_name})
+    smi = smi.rename(columns={id_name: new_id_name}) # TODO
     id_name = new_id_name
 
     if "drugbank" in smiles_path:
@@ -140,6 +139,19 @@ def run(args):
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.strip())
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.split()[0])
         fea_id0 = smi.shape[1]  # index of the first feature
+    elif "ovarian" in smiles_path:
+        smi = smi.sort_values('drug_name')
+        smi = smi.rename(columns={'smiles': 'SMILES'})
+        smi_na = smi[smi['SMILES'].isna()]
+        smi = smi[~smi['SMILES'].isna()]
+        smi['SMILES'] = smi['SMILES'].map(lambda x: x.strip())
+        smi['SMILES'] = smi['SMILES'].map(lambda x: x.split()[0])
+        smi = smi[['drug_name', 'SMILES']]
+        smi.insert(loc=1, column="improve_chem_id",
+                   value=[f'dummy_{i}' for i in range(len(smi))],
+                   allow_duplicates=False)
+        fea_id0 = smi.shape[1]  # index of the first feature
+        # smi = smi[:10]
     else:
         smi = smi.astype({'SMILES': str, id_name: str})
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.strip())

@@ -1,7 +1,7 @@
 import sys
 import logging
 import platform
-import psutil
+# import psutil
 from datetime import datetime
 
 
@@ -51,7 +51,8 @@ class Logger():
 
         self.logger.info('{}'.format('-' * 90))
         self.logger.info(datetime.now())
-        self.logger.info(f'Machine: {platform.node()} ({platform.system()}, {psutil.cpu_count()} CPUs)')
+        # self.logger.info(f'Machine: {platform.node()} ({platform.system()}, {psutil.cpu_count()} CPUs)')
+        self.logger.info(f'Machine: {platform.node()} ({platform.system()}')
         #return logger
 
 
