@@ -44,6 +44,7 @@ SMILES_PATH = Path(filepath, '../sample_data/BL2.smi.sample').resolve()
 # Global outdir
 GOUT = Path(filepath, '../out').resolve()
 
+SMI_COL_NAME = 'canSMILES'
 
 def parse_args(args):
     parser = argparse.ArgumentParser(description='Generate molecular feature sets.')
@@ -129,35 +130,31 @@ def run(args):
     else:
         smi = pd.read_csv(smiles_path, sep='\t')
 
-    new_id_name = "DrugID"  # rename column drug id_name
-    smi = smi.rename(columns={id_name: new_id_name}) # TODO
-    id_name = new_id_name
+    # new_id_name = "DrugID"  # rename column drug id_name
+    # smi = smi.rename(columns={id_name: new_id_name}) # TODO
+    # id_name = new_id_name
 
+    smi = smi.astype({'SMILES': str, id_name: str})
     if "drugbank" in smiles_path:
-        # for TOM's drugbank-all.smi file!!
-        smi = smi.astype({'SMILES': str})
+        # for TOM's drugbank-all.smi file!
+        # smi = smi.astype({'SMILES': str})
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.strip())
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.split()[0])
-        fea_id0 = smi.shape[1]  # index of the first feature
     elif "ovarian" in smiles_path:
-        smi = smi.sort_values('drug_name')
-        smi = smi.rename(columns={'smiles': 'SMILES'})
+        breakpoint()
+        smi = smi.sort_values(id_name)
         smi_na = smi[smi['SMILES'].isna()]
         smi = smi[~smi['SMILES'].isna()]
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.strip())
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.split()[0])
-        smi = smi[['drug_name', 'SMILES']]
-        smi.insert(loc=1, column="improve_chem_id",
-                   value=[f'dummy_{i}' for i in range(len(smi))],
-                   allow_duplicates=False)
-        fea_id0 = smi.shape[1]  # index of the first feature
-        # smi = smi[:10]
+        smi[id_name] = smi[id_name].map(lambda x: x.strip())
+        # smi.insert(loc=1, column="improve_chem_id",
+        #            value=[f'dummy_{i}' for i in range(len(smi))],
+        #            allow_duplicates=False)
     else:
-        smi = smi.astype({'SMILES': str, id_name: str})
+        # smi = smi.astype({'SMILES': str, id_name: str})
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.strip())
         smi[id_name] = smi[id_name].map(lambda x: x.strip())
-        # n_smiles = smi.shape[0]
-        fea_id0 = smi.shape[1]  # index of the first feature
 
     # Create Outdir
     # i1, i2 = args.i1, args.i2
@@ -198,15 +195,27 @@ def run(args):
         bad_smi.to_csv(gout/'smi_canon_err.csv', index=False)
 
     # Keep the good (canonicalized) SMILES
-    smi['SMILES'] = can_smi_vec
+    # smi['SMILES'] = can_smi_vec  # legacy
+    smi[SMI_COL_NAME] = can_smi_vec
     smi = smi[~nan_ids].reset_index(drop=True)
+
+    # Create canSMILES (new for IMPROVE)
+    smi.to_csv(gout/('drug_SMILES.tsv'), sep='\t', index=False)
+
+    # Prep smiles file for feature gen (keep only two cols)
+    # smi = smi[[id_name, SMI_COL_NAME]]
+    fea_id0 = smi.shape[1]  # index of the first feature
 
     # ========================================================
     # Generate images
     # ---------------
     if 'images' in fea_type:
-        images = smiles_to_images(smi, smi_col_name='SMILES', title_col_name=id_name,
-                                  molSize=(128, 128), kekulize=True, par_jobs=par_jobs)
+        images = smiles_to_images(smi,
+                                  smi_col_name='SMILES',
+                                  title_col_name=id_name,
+                                  molSize=(128, 128),
+                                  kekulize=True,
+                                  par_jobs=par_jobs)
         # print(images[0].keys())
         # img_outpath = gout/f'images.ids.{i1}-{i2}.pkl'
         img_outpath = gout/'images.pkl'
@@ -222,12 +231,19 @@ def run(args):
     # ---------------------
     if 'fps' in fea_type:
         def gen_fps_and_save(smi, radius=1, nbits=2048, par_jobs=par_jobs):
-            ecfp = smiles_to_fps(smi, smi_name='SMILES', radius=radius,
-                                 nbits=nbits, par_jobs=par_jobs)
-            ecfp = add_fea_prfx(ecfp, prfx=f'ecfp{2*radius}.', id0=fea_id0)
-            # ecfp.to_parquet(gout/f'ecfp{2*radius}.ids.{i1}-{i2}.{file_format}')
+            ecfp = smiles_to_fps(smi,
+                                 # smi_name='SMILES',  # legacy
+                                 smi_col_name='canSMILES',
+                                 radius=radius,
+                                 nbits=nbits,
+                                 par_jobs=par_jobs)
+            ecfp_prfx = f'ecfp{2*radius}.'
+            ecfp = add_fea_prfx(ecfp, prfx=ecfp_prfx, id0=fea_id0)
+            fea_cols = [c for c in ecfp.columns if ecfp_prfx in c]
+            ecfp = ecfp[[id_name] + fea_cols]
             ecfp.to_parquet(gout/f'ecfp{2*radius}_nbits{nbits}.parquet')
-            ecfp.to_csv(gout/f'ecfp{2*radius}_nbits{nbits}', sep='\t', index=False)
+            ecfp.to_csv(gout/f'ecfp{2*radius}_nbits{nbits}.tsv', sep='\t', index=False)
+            # ecfp.to_parquet(gout/f'ecfp{2*radius}.ids.{i1}-{i2}.{file_format}')
             del ecfp
 
         gen_fps_and_save(smi, radius=1, nbits=nbits, par_jobs=par_jobs)
@@ -238,12 +254,18 @@ def run(args):
     # Generate Mordred
     # ----------------
     if 'mordred' in fea_type:
-        dd = smiles_to_mordred(smi, smi_name='SMILES',
+        dd = smiles_to_mordred(smi,
+                               # smi_name='SMILES',  # legacy
+                               smi_col_name='canSMILES',
                                ignore_3D=args.ignore_3D,
                                par_jobs=par_jobs)
+        breakpoint()
         fea_sep = '.'
         # dd = add_fea_prfx(dd, prfx=f'dd{fea_sep}', id0=fea_id0)
+        dd_prfx = f'mordred{fea_sep}'
         dd = add_fea_prfx(dd, prfx=f'mordred{fea_sep}', id0=fea_id0)
+        fea_cols = [c for c in dd.columns if dd_prfx in c]
+        dd = dd[[id_name] + fea_cols]
 
         # Filter NaNs (step 1)
         # Drop rows where all values are NaNs
@@ -291,7 +313,7 @@ def run(args):
         print_fn('\nSave mordred with nans.')
         fname = 'dd.mordred.with.nans'
         dd.to_parquet(gout/(fname+'.parquet'))
-        dd.to_csv(gout/(fname+'.csv'), sep='\t', index=False)
+        dd.to_csv(gout/(fname+'.tsv'), sep='\t', index=False)
         # dd.to_csv( gout/'dd.ids.{}-{}.{}'.format(i1, i2, file_format), index=False )
 
         # Impute missing values
@@ -304,7 +326,7 @@ def run(args):
         print_fn('\nSave mordred with nans imputed.')
         fname = 'dd.mordred'
         dd.to_parquet(gout/(fname+'.parquet'))
-        dd.to_csv(gout/(fname+'.csv'), sep='\t', index=False)
+        dd.to_csv(gout/(fname+'.tsv'), sep='\t', index=False)
         # dd.to_csv( gout/'dd.ids.{}-{}.{}'.format(i1, i2, file_format), index=False )
 
     # ======================================================

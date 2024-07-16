@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Generate molecular features for Pilot1.
-# par_jobs=1
-par_jobs=32
+par_jobs=1
+# par_jobs=32
 # par_jobs=64
 # fea_type="descriptors fps"
 fea_type="mordred fps"
@@ -19,9 +19,9 @@ nbits=512
 # IMPROVE
 # FNAME=drug_info_2k  # legacy
 # FNAME=drug_info.tsv
-# FNAME=OvarianCancerDrugsIMPROVE.txt
-# FNAME=drug_SMILES.tsv
-FNAME=PDO_pubchem_smiles.tsv
+# FNAME=PDO_pubchem_smiles.tsv
+FNAME=pdo_drug_not_matched.txt
+
 dname=ovarian/${FNAME}
 gout=out.ovarian/${FNAME}
 

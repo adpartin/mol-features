@@ -2,8 +2,6 @@
 
 set -e
 
-# conda create -n ovarian python=3.9 pip pandas joblib pyarrow rdkit mordred scikit-learn
-
 # conda create -n ovarian python=3.9 pip pandas joblib pyarrow rdkit mordredcommunity scikit-learn
 
 # My packages

@@ -17,15 +17,15 @@ def canon_single_smile(smi):
     return can_smi
 
 
-# def canon_df(df, smi_name='SMILES', par_jobs=16):
-#     """ Canonicalize the SMILES sting in column name smi_name. """
+# def canon_df(df, smi_col_name='SMILES', par_jobs=16):
+#     """ Canonicalize the SMILES sting in column name smi_col_name. """
 #     smi_vec = []
 #     t0 = time()
 #     if par_jobs>1:
 #         smi_vec = Parallel(n_jobs=par_jobs, verbose=1)(
-#                 delayed(canon_single_smile)(smi) for smi in df[smi_name].tolist())
+#                 delayed(canon_single_smile)(smi) for smi in df[smi_col_name].tolist())
 #     else:
-#         for i, smi in enumerate(df[smi_name].values):
+#         for i, smi in enumerate(df[smi_col_name].values):
 #             if i%100000==0:
 #                 print('{}: {:.2f} mins'.format(i, (time()-t0)/60 ))
 #             can_smi = canon_single_smile( smi )
@@ -82,10 +82,10 @@ def fps_single_smile(smi, radius=2, nbits=2048):
     return fp_arr
 
 
-def smiles_to_fps(df, smi_name='SMILES', radius=2, nbits=2048, par_jobs=8):
+def smiles_to_fps(df, smi_col_name='SMILES', radius=2, nbits=2048, par_jobs=8):
     """ Generate dataframe of fingerprints from SMILES. """
     df = df.reset_index(drop=True)
-    smiles = df[smi_name].values
+    smiles = df[smi_col_name].values
     res = Parallel(n_jobs=par_jobs, verbose=1)(
             delayed(fps_single_smile)(smi, radius=radius, nbits=nbits) for smi in smiles)
     # fps_list = [dct['fps'] for dct in res]
@@ -99,14 +99,14 @@ def smiles_to_fps(df, smi_name='SMILES', radius=2, nbits=2048, par_jobs=8):
     return fps
 
 
-def smiles_to_mordred(df, smi_name='SMILES', ignore_3D=True, par_jobs=8):
+def smiles_to_mordred(df, smi_col_name='SMILES', ignore_3D=True, par_jobs=8):
     """ Generate dataframe of Mordred descriptors from SMILES. """
     from rdkit import Chem
     from mordred import Calculator, descriptors
     df = df.reset_index(drop=True)
 
     # Convert SMILES to mols
-    smiles = df[smi_name].values
+    smiles = df[smi_col_name].values
     mols = [Chem.MolFromSmiles(smi) for smi in smiles]
 
     # Create Mordred calculator and compute descriptors from molecules 
