@@ -62,10 +62,10 @@ smi = smi[~smi['DrugID'].isin(dups_nsc_list)]
 smi = smi[[id_name, 'canSMILES']]
 
 # Save data
-mrd_merged.to_csv(outdir / 'drug_mordred_ovarian.csv', index=False)
-fps_merged.to_csv(outdir / 'drug_ecfp4_ovarian.csv', index=False)
-info_merged.to_csv(outdir / 'drug_info_ovarian.csv', index=False)
-smi.to_csv(outdir / 'drug_SMILES_ovarian.csv', index=False)
+mrd_merged.to_csv(outdir / 'drug_mordred_ovarian.tsv', sep='\t', index=False)
+fps_merged.to_csv(outdir / 'drug_ecfp4_nbits512_ovarian.tsv', sep='\t', index=False)
+info_merged.to_csv(outdir / 'drug_info_ovarian.tsv', sep='\t', index=False)
+smi.to_csv(outdir / 'drug_SMILES_ovarian.tsv', sep='\t', index=False)
 
 print("\nMordred:\n", mrd_merged.iloc[:4, :10])
 print("\nECFP4:\n", fps_merged.iloc[:4, :10])
