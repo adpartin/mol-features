@@ -101,7 +101,7 @@ testpath==0.4.4
 tinycss2==1.0.2
 torch==1.5.0
 torchvision==0.6.0a0+82fd1c8
-tornado==6.0.4
+tornado==6.4.2
 tqdm==4.44.1
 traitlets==4.3.3
 urllib3==1.25.7
