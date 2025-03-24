@@ -16,8 +16,9 @@ nbits=512
 # gout=out.pilot1/July2020/drug_info
 
 # IMPROVE
-dname=IMPROVE/July2020/drug_info_2k
-gout=out.improve/July2020/drug_info_2k
+# dname=IMPROVE/July2020/drug_info_2k  # legacy
+dname=improve/drug_info_2k
+gout=out.improve/drug_info_2k
 
 smiles_path=data/$dname
 
