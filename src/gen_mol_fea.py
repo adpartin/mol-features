@@ -26,7 +26,12 @@ import pandas as pd
 # sys.path.append( os.path.abspath(filepath/'../utils') )
 from utils.classlogger import Logger
 from utils.utils import get_print_func, drop_dup_rows, dropna
-from utils.smiles import canon_smiles, smiles_to_mordred, smiles_to_fps, smiles_to_images
+from utils.smiles import (
+    canon_smiles,
+    smiles_to_mordred,
+    smiles_to_fps,
+    smiles_to_images
+)
 
 filepath = Path(__file__).resolve().parent
 
@@ -116,6 +121,7 @@ def get_image(mol):
 
 
 def run(args):
+    # breakpoint()
     t0 = time()
     smiles_path = args.smiles_path
     id_name = args.id_name
@@ -141,7 +147,6 @@ def run(args):
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.strip())
         smi['SMILES'] = smi['SMILES'].map(lambda x: x.split()[0])
     elif "ovarian" in smiles_path:
-        breakpoint()
         smi = smi.sort_values(id_name)
         smi_na = smi[smi['SMILES'].isna()]
         smi = smi[~smi['SMILES'].isna()]
@@ -259,7 +264,6 @@ def run(args):
                                smi_col_name='canSMILES',
                                ignore_3D=args.ignore_3D,
                                par_jobs=par_jobs)
-        breakpoint()
         fea_sep = '.'
         # dd = add_fea_prfx(dd, prfx=f'dd{fea_sep}', id0=fea_id0)
         dd_prfx = f'mordred{fea_sep}'

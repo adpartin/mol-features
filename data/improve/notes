@@ -1,0 +1,2 @@
+The file drug_SMILES.tsv is copied from csa_data/x_data/drug_SMILES.tsv
+The canSMILES column was renamed to SMILES.
