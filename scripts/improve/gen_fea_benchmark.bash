@@ -5,9 +5,9 @@
 par_jobs=16
 # par_jobs=32
 # par_jobs=64
-fea_type="mordred"
-# fea_type="mordred fps"
-# nbits=512
+# fea_type="mordred"
+fea_type="mordred fps"
+nbits=512
 
 # -------------------------------------------------------
 # 1800 drugs (CCLE, CTRP, gCSI, GDSC, NCI60): 2142 smiles
@@ -25,6 +25,7 @@ id_name=improve_chem_id
 python src/gen_mol_fea.py \
     --smiles_path $smiles_path \
     --id_name $id_name \
+    --nbits $nbits \
     --gout $gout \
     --par_jobs $par_jobs \
     --ignore_3D \

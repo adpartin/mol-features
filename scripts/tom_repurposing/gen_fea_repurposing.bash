@@ -4,17 +4,21 @@
 # small set of smiles strings. For the larger set of smiles we can use Parsl.
 
 par_jobs=16
-fea_type="mordred"
+# fea_type="mordred"
+fea_type="mordred fps"
+nbits=512
 
+dname=repurposing/merged_on_target.tsv
 gout=out.repurposing
-smiles_path=data/repurposing/merged_on_target.tsv
 
-# gout=out.drugbank/all-filtered
-# smiles_path=data/drugbank/drugbank-all-filtered.smi
+smiles_path=data/$dname
+
+id_name=ID
 
 python src/gen_mol_fea.py \
     --smiles_path $smiles_path \
-    --id_name ID \
+    --id_name $id_name \
+    --nbits $nbits \
     --gout $gout \
     --par_jobs $par_jobs \
     --ignore_3D \

@@ -75,8 +75,8 @@ def parse_args(args):
                         help='Feature type (default: descriptors).')
     parser.add_argument('--nbits',
                         type=int,
-                        default=2024,
-                        help='Number of bits in Morgan (circular) fingerprints (default: 2024).')
+                        default=2048,
+                        help='Number of bits in Morgan (circular) fingerprints (default: 2048).')
     parser.add_argument('--par_jobs',
                         type=int,
                         default=1,
@@ -121,7 +121,7 @@ def get_image(mol):
 
 
 def run(args):
-    # breakpoint()
+    breakpoint()
     t0 = time()
     smiles_path = args.smiles_path
     id_name = args.id_name
@@ -316,8 +316,8 @@ def run(args):
         # fname = 'dd.mordred.{}'.format('' if args.impute else 'with.nans')
         print_fn('\nSave mordred with nans.')
         fname = 'dd.mordred.with.nans'
-        dd.to_parquet(gout/(fname+'.parquet'))
-        dd.to_csv(gout/(fname+'.tsv'), sep='\t', index=False)
+        dd.to_parquet(gout / (fname + '.parquet'))
+        dd.to_csv(gout / (fname + '.tsv'), sep='\t', index=False)
         # dd.to_csv( gout/'dd.ids.{}-{}.{}'.format(i1, i2, file_format), index=False )
 
         # Impute missing values
@@ -329,8 +329,8 @@ def run(args):
         # Save
         print_fn('\nSave mordred with nans imputed.')
         fname = 'dd.mordred'
-        dd.to_parquet(gout/(fname+'.parquet'))
-        dd.to_csv(gout/(fname+'.tsv'), sep='\t', index=False)
+        dd.to_parquet(gout / (fname + '.parquet'))
+        dd.to_csv(gout / (fname + '.tsv'), sep='\t', index=False)
         # dd.to_csv( gout/'dd.ids.{}-{}.{}'.format(i1, i2, file_format), index=False )
 
     # ======================================================
