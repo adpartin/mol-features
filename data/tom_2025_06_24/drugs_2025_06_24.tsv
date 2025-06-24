@@ -1,0 +1,8 @@
+ID	SMILES
+CHEMBL1487	CC(C)c1c(C(=O)Nc2ccccc2)c(-c2ccccc2)c(-c2ccc(F)cc2)n1CC[C@@H](O)C[C@@H](O)CC(=O)O
+CHEMBL289469	CN1C2CCCC1CC(NC(=O)c1nn(C)c3ccccc13)C2
+CHEMBL3360305	COc1cccc(-c2cc(F)ccc2[C@H]2Cc3nc(N)nc(C)c3C(=O)N2)n1
+CHEMBL1679	Nc1nc(=O)c2c([nH]1)NCC(CNc1ccc(C(=O)N[C@@H](CCC(=O)O)C(=O)O)cc1)N2C=O
+CHEMBL191	CCCCc1nc(Cl)c(CO)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1
+CHEMBL1431	CN(C)C(=N)NC(=N)N
+
